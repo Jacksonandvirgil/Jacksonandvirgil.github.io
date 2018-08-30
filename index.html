@@ -316,6 +316,222 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/30/如何利用极限学习机进行分类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李栋豪">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/123.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李栋豪的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/30/如何利用极限学习机进行分类/" itemprop="url">如何利用极限学习机进行分类</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-30T16:38:11+08:00">
+                2018-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  513
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>说明</strong></p>
+<ul>
+<li>极限学习机的基本概述</li>
+<li>本文利用极限学习机实现二分类及多分类</li>
+<li>最终实现跌倒和非跌倒的分类<br><strong>思路</strong><br>-利用极限学习机先对数据进行离线训练，得到训练模型后实时判断是否为跌倒状态<br><strong>离线训练代码示例</strong><br>clc;<br>clear;<br>traindata=load(‘G:\serialPort\data\traindata1.csv’);<br>feature=traindata(1:end,5:13);<br>label=traindata(:,14);%标签<br>X=feature;<br>[N,n]=size(X);<br>L=500;<br>m=5;                          % 慢走1，慢跑2，倒走3，“走楼梯“，”前跌“，后跌4，侧跌5。  5分类<br>W=rand(n,L)<em>2-1;%权重-1到1<br>b_1=rand(1,L);<br>b=ones(N,1)</em>b_1;<br>H=1./(1+exp(-X*W+b));<br>temp_T=zeros(N,m);<br>for i=1:N<br>  if(label(i)==1)<pre><code>temp_T(i,1)=1;
+temp_T(i,2)=0;
+temp_T(i,3)=0;
+temp_T(i,4)=0;
+temp_T(i,5)=0;
+</code></pre>  end<br>  if(label(i)==2)<pre><code>temp_T(i,1)=0;
+temp_T(i,2)=1;
+temp_T(i,3)=0;
+temp_T(i,4)=0;
+temp_T(i,5)=0;
+</code></pre>  end<br>  if(label(i)==3)<pre><code>temp_T(i,1)=0;
+temp_T(i,2)=0;
+temp_T(i,3)=1;
+temp_T(i,4)=0;
+temp_T(i,5)=0;
+</code></pre>  end<br>  if(label(i)==4)<pre><code>temp_T(i,1)=0;
+temp_T(i,2)=0;
+temp_T(i,3)=0;
+temp_T(i,4)=1;
+temp_T(i,5)=0;
+</code></pre>  end<br>  if(label(i)==5)<pre><code>temp_T(i,1)=0;
+temp_T(i,2)=0;
+temp_T(i,3)=0;
+temp_T(i,4)=0;
+temp_T(i,5)=1;
+</code></pre>  end<br>end<br>T=temp_T<em>2-1;<br>beta=pinv(H)</em>T;<br>x_1=X(:,1);<br>x_2=X(:,2);<br>testfeature = feature;<br>[N,n] = size(testfeature);<br>testT = zeros(N,1);<br>Tt = zeros(N,m);<br>for i = 1:N<br>  h=1./(1+exp(-testfeature(i,:)<em>W+b_1));<br>  t = h </em> beta;<br>  Tt(i,:) = t;<br>  if t(1) &gt; 0 &amp;&amp; t(2) &lt; 0 &amp;&amp; t(3) &lt; 0 &amp;&amp; t(4) &lt; 0 &amp;&amp; t(5) &lt; 0<pre><code>testT(i) = 1;
+</code></pre>  end<br>  if t(2) &gt; 0 &amp;&amp; t(1) &lt; 0 &amp;&amp; t(3) &lt; 0 &amp;&amp; t(4) &lt; 0 &amp;&amp; t(5) &lt; 0<pre><code>testT(i) = 2;
+</code></pre>  end<br>  if t(3) &gt; 0 &amp;&amp; t(1) &lt; 0 &amp;&amp; t(2) &lt; 0 &amp;&amp; t(4) &lt; 0 &amp;&amp; t(5) &lt; 0<pre><code>testT(i) = 3;
+</code></pre>  end<br>  if t(4) &gt; 0 &amp;&amp; t(1) &lt; 0 &amp;&amp; t(3) &lt; 0 &amp;&amp; t(2) &lt; 0 &amp;&amp; t(5) &lt; 0<pre><code>testT(i) = 4;
+</code></pre>  end<br>  if t(5) &gt; 0 &amp;&amp; t(1) &lt; 0 &amp;&amp; t(3) &lt; 0 &amp;&amp; t(4) &lt; 0 &amp;&amp; t(2) &lt; 0<pre><code>testT(i) = 5;
+</code></pre>  end<br>end<br>for i = 1:14<br>  test = testT(40000+(i-1)<em>350:40000+i</em>350,:);<br>  fall = 0;  stand = 0;<br>  for j=1:350<pre><code>if test(j) == 4 || test(j) == 5
+    fall = fall+1;
+else
+    stand = stand+1;
+end     
+</code></pre>  end<br>  if fall &gt; stand<pre><code>disp(&apos;跌倒&apos;)
+</code></pre>  else<pre><code>disp(&apos;正常&apos;)
+</code></pre>  end<br>end<br>% test = testT(end-350:end,:);</li>
+</ul>
+<p>csvwrite(‘G:\serialPort\data\weight.csv’,W);<br>csvwrite(‘G:\serialPort\data\beta.csv’,beta);<br>csvwrite(‘G:\serialPort\data\bias.csv’,b_1);</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -513,14 +729,32 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
           
 
           
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
