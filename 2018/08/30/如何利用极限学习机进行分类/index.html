@@ -105,7 +105,7 @@
 <meta property="og:site_name" content="李栋豪的博客">
 <meta property="og:description" content="说明  极限学习机的基本概述 本文利用极限学习机实现二分类及多分类 最终实现跌倒和非跌倒的分类思路 利用极限学习机先对数据进行离线训练，得到训练模型后实时判断是否为跌倒状态离线训练代码示例clc;clear;traindata=load(‘G:\serialPort\data\traindata1.csv’);feature=traindata(1:end,5:13);label=traindat">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-30T09:21:06.847Z">
+<meta property="og:updated_time" content="2018-08-30T09:35:59.427Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何利用极限学习机进行分类">
 <meta name="twitter:description" content="说明  极限学习机的基本概述 本文利用极限学习机实现二分类及多分类 最终实现跌倒和非跌倒的分类思路 利用极限学习机先对数据进行离线训练，得到训练模型后实时判断是否为跌倒状态离线训练代码示例clc;clear;traindata=load(‘G:\serialPort\data\traindata1.csv’);feature=traindata(1:end,5:13);label=traindat">
@@ -441,7 +441,7 @@
 <li>极限学习机的基本概述</li>
 <li>本文利用极限学习机实现二分类及多分类</li>
 <li>最终实现跌倒和非跌倒的分类<br><strong>思路</strong></li>
-<li>利用极限学习机先对数据进行离线训练，得到训练模型后实时判断是否为跌倒状态<br><strong>离线训练代码示例</strong><br>clc;<br>clear;<br>traindata=load(‘G:\serialPort\data\traindata1.csv’);<br>feature=traindata(1:end,5:13);<br>label=traindata(:,14);%标签<br>X=feature;<br>[N,n]=size(X);<br>L=500;<br>m=5;                          % 慢走1，慢跑2，倒走3，“走楼梯“，”前跌“，后跌4，侧跌5， 5分类<br>W=rand(n,L)<em>2-1;%权重-1到1<br>b_1=rand(1,L);<br>b=ones(N,1)</em>b_1;<br>H=1./(1+exp(-X*W+b));<br>temp_T=zeros(N,m);<br>for i=1:N<br>  if(label(i)==1)<pre><code>temp_T(i,1)=1;
+<li>利用极限学习机先对数据进行离线训练，得到训练模型后实时判断是否为跌倒状态<br><strong>离线训练代码示例</strong><br>clc;<br>clear;<br>traindata=load(‘G:\serialPort\data\traindata1.csv’);<br>feature=traindata(1:end,5:13);<br>label=traindata(:,14);%标签<br>X=feature;<br>[N,n]=size(X);<br>L=500;<br>m=5;    % 慢走1，慢跑2，倒走3，“走楼梯“，”前跌“，后跌4，侧跌5， 5分类<br>W=rand(n,L)<em>2-1;%权重-1到1<br>b_1=rand(1,L);<br>b=ones(N,1)</em>b_1;<br>H=1./(1+exp(-X*W+b));<br>temp_T=zeros(N,m);<br>for i=1:N<br>  if(label(i)==1)<pre><code>temp_T(i,1)=1;
 temp_T(i,2)=0;
 temp_T(i,3)=0;
 temp_T(i,4)=0;
